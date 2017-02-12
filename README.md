@@ -196,8 +196,6 @@ I did this in method `_calculate_radius` in `main.py`
 
 ####6.Plotted back down onto the road
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
 this has been done in method `apply_fit_to_road` in `main.py`, please see image below
 
 ![alt text][final_lane_find]
@@ -206,13 +204,16 @@ this has been done in method `apply_fit_to_road` in `main.py`, please see image 
 
 ###Pipeline (video)
 
+Layout:
+
 | Original Input                   | Perspective transform + Histogram + PloyFit |
 | ---------------------------------|---------------------------------------------|
 | Plotted Back Down Onto the Road  | Information                                 |
                                                                  
 Video of my project output
+
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=y2jeJk-2F4I" target="_blank">
-<img src="http://img.youtube.com/vi/y2jeJk-2F4I/0.jpg" alt="UDacity Sample Data" width="320" height="360" border="10" /></a>
+<img src="http://img.youtube.com/vi/y2jeJk-2F4I/0.jpg" alt="UDacity Sample Data" width="640" height="360" border="10" /></a>
 
 
 ---
