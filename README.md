@@ -24,6 +24,7 @@ The goals / steps of this project are the following:
 [image_area_peak]: ./other_images/histogram_area_instead_of_peak_point.png "histogram_area_instead_of_peak_point"
 [image_sobel_combined]: ./output_images/image_combined_4.jpg "sobel find combined"
 [perspective]: ./output_images/perspective/test6.jpg.png "perspective"
+[final_lane_find]: ./output_images/lane/combine_straight_lines1.jpg.png "final lane find"
 
 ##Before Start
 The whole code structure has been designed for fast debug
@@ -107,13 +108,19 @@ save_image(perspective_img, '../output_images/perspective/{}.png'.format(fname))
 
 ####3. Fit positions with a polynomial from lane-line pixels
 
+method `find_line_with_slide_window` in `main.py` apply slide window into search area and return
+all points found, we then fit positions with polynomial in method `process_image`
+
 #####3.1 Cached Search Base Position
 once we know roughly where are two lanes, we can cache it and next frame could search in the similar area. 
-the code in main.py
+the code in main.py method named `_line_search_base_position`
+
+If a last know fit has been found, the fit for next frame will only search between last fit +- 120
+
 ```python
 @staticmethod
 def _line_search_base_position(histogram,
-                               last_know_leftx_base=None, last_know_rightx_base=None, peak_detect_offset=80):
+                               last_know_leftx_base=None, last_know_rightx_base=None, peak_detect_offset=120):
     if last_know_leftx_base is None or last_know_rightx_base is None:
         midpoint = np.int(histogram.shape[0] // 2)
         leftx_base = np.argmax(histogram[:midpoint])
@@ -153,33 +160,63 @@ def test_line_search_base_position_should_find_peak_point_near_last_know_positio
     self.assertEqual(right, 8)
 ```
 #####3.2 Abnormal detection and auto-correction
+LandFinder class will save last 5 "normal" fit, they new_left_fit and new_right_fit will
+compare with last normal fit, if they didn't off the center too much, we think the new fit
+is "normal" and system will allow to use it to following process, otherwise new fit will discard
+and last know "normal" fit will used for current frame.
+Only 5 frames maximum allocated to replace the new fit, if 5 frames still consider as "abnormal"
+this "abnormal" fit will still been used.
 
+```python
+def _compare_and_get_best_fit(self, new_left_fit, new_right_fit):
+    if self._is_normal_fit(new_left_fit, new_right_fit):
+        self.last_left_fits.append(new_left_fit)
+        self.last_right_fits.append(new_right_fit)
+        if len(self.last_left_fits) > self.MAX_REUSED_FRAME:
+            self._drop_oldest_cached_fits()
+        return new_left_fit, new_right_fit
+    else:
+        self._drop_oldest_cached_fits()
+        left, right = self._recent_fits()
+        print("fit abnormal, dropped. cached left{} cached right{} new left:{} new right:{}".format(
+            left, right, new_left_fit, new_right_fit
+        ))
+        if left is None:
+            print("Cache Fit exhausted, accepting new fit")
+            return new_left_fit, new_right_fit
+        return left, right
+```
 
-![alt text][image5]
+####4. Calculate the radius of curvature of the lane and the position of the vehicle
 
-####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+I did this in method `_calculate_radius` in `main.py`
 
-I did this in lines # through # in my code in `my_other_file.py`
-
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+####6.Plotted back down onto the road
 
 I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
 
-![alt text][image6]
+this has been done in method `apply_fit_to_road` in `main.py`, please see image below
+
+![alt text][final_lane_find]
 
 ---
 
 ###Pipeline (video)
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+| Original Input                   | Perspective transform + Histogram + PloyFit |
+| ---------------------------------|---------------------------------------------|
+| Plotted Back Down Onto the Road  | Information                                 |
+                                                                 
+Video of my project output
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=y2jeJk-2F4I" target="_blank">
+<img src="http://img.youtube.com/vi/y2jeJk-2F4I/0.jpg" alt="UDacity Sample Data" width="320" height="360" border="10" /></a>
 
-Here's a [link to my video result](./project_video.mp4)
 
 ---
 
 ###Discussion
 
-####1. Historgram maybe shouldn't look at the highest point, should look at the highest area. As show in below 
+####1. Historgram maybe shouldn't look at the highest point, look at the highest area. As show in below 
 ![alt text][image_area_peak]
 
 ####2. The implement here are very sensitive to lights

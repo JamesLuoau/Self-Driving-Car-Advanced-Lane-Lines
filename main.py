@@ -273,6 +273,17 @@ class LaneFinder(object):
         return plot_to_image(plt)
 
     def _compare_and_get_best_fit(self, new_left_fit, new_right_fit):
+        """
+        LandFinder class will save last 5 "normal" fit, they new_left_fit and new_right_fit will
+        compare with last normal fit, if they didn't off the center too much, we think the new fit
+        is "normal" and system will allow to use it to following process, otherwise new fit will discard
+        and last know "normal" fit will used for current frame.
+        Only 5 frames maximum allocated to replace the new fit, if 5 frames still consider as "abnormal"
+        this "abnormal" fit will still been used.
+        :param new_left_fit:
+        :param new_right_fit:
+        :return:
+        """
         if self._is_normal_fit(new_left_fit, new_right_fit):
             self.last_left_fits.append(new_left_fit)
             self.last_right_fits.append(new_right_fit)
