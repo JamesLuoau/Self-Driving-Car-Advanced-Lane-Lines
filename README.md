@@ -25,14 +25,17 @@ The goals / steps of this project are the following:
 [image_sobel_combined]: ./output_images/image_combined_4.jpg "sobel find combined"
 [perspective]: ./output_images/perspective/test6.jpg.png "perspective"
 [final_lane_find]: ./output_images/lane/combine_straight_lines1.jpg.png "final lane find"
+[gif_demo]: ./other_images/SelfDrvingCar_AdvancedLaneFind.gif "gif_demo"
 
 ##Before Start
 The whole code structure has been designed for fast debug
-run **main.py**, it will create target video, there is a image index in very frame, if you see any frame not right
+
+Run **main.py**, it will create target video, there is a image index in very frame, if you see any frame not right
 you can just pick up the images from **video_images** folder with same index file name, put this file into 
 **test_images**, run whole unit test in **/test/sobel_test.py**, it will create images for every step so that you can 
 do a detailed check why it's failing.
 
+![alt text][gif_demo]
 
 ###Camera Calibration
 
