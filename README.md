@@ -213,7 +213,7 @@ Layout:
 Video of my project output
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=y2jeJk-2F4I" target="_blank">
-<img src="http://img.youtube.com/vi/y2jeJk-2F4I/0.jpg" alt="UDacity Sample Data" width="1200" height="800" border="10" /></a>
+<img src="http://img.youtube.com/vi/y2jeJk-2F4I/0.jpg" alt="UDacity Sample Data" width="800" height="600" border="10" /></a>
 
 
 ---
