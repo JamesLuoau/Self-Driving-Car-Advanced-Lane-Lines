@@ -224,3 +224,11 @@ Video of my project output
 ![alt text][image_area_peak]
 
 ####2. The implement here are very sensitive to lights
+Maybe add auto exposure feature would help, for example analysis the image and increase exposure if it's too dark and vice versa
+
+####3. Not able to handle change lane
+
+####4. A yellow / white car in front would be very challenge
+In this case the histogram will pick up that car instead of lane lines
+
+
