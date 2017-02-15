@@ -31,9 +31,9 @@ The goals / steps of this project are the following:
 The whole code structure has been designed for fast debug
 
 Run **main.py**, it will create target video, there is a image index in very frame, if you see any frame not right
-you can just pick up the images from **video_images** folder with same index file name, put this file into 
+you can just pick up the image from **video_images** folder, put this file into 
 **test_images**, run whole unit test in **/test/sobel_test.py**, it will create images for every step so that you can 
-do a detailed check why it's failing.
+do a detailed check.
 
 ![alt text][gif_demo]
 
